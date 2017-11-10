@@ -1,0 +1,10 @@
+dev
+proc
+sys
+tmp
+var
+run
+etc/random-seed
+etc/dropbear
+root/.ash_history
+root/exclude-list.txt
