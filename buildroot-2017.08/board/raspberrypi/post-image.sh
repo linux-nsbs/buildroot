@@ -47,4 +47,13 @@ genimage                           \
 	--outputpath "${BINARIES_DIR}" \
 	--config "${GENIMAGE_CFG}"
 
+if [ ! -f /bin/tar_suid ] || [ ! -f /bin/rm_suid ]; then
+  echo "ERROR: Cannot extract rootfs.tar"
+  [ ! -f /bin/tar_suid ] && echo "       /bin/tar_setuid is missing. Create is with: sudo cp /bin/tar /bin/tar_suid && sudo chmod u+s /bin/tar_suid"
+  [ ! -f /bin/rm_suid ] && echo "       /bin/rm_setuid is missing. Create is with: sudo cp /bin/rm /bin/rm_suid && sudo chmod u+s /bin/rm_suid"
+else
+  rm_suid -rf ${BINARIES_DIR}/rootfs/*
+  tar_suid -xf ${BINARIES_DIR}/rootfs.tar -C ${BINARIES_DIR}/rootfs
+fi
+
 exit $?
