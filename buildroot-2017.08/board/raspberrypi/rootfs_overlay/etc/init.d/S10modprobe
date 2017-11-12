@@ -1,0 +1,29 @@
+#!/bin/sh
+
+case "$1" in
+  start)
+	printf "Loading modules: "
+	grep '^[^#]' "/etc/modules" | \
+	while read module args; do
+		[ "$module" ] || continue
+		/sbin/modprobe $module $args && echo "  $module loaded" || echo "  $module failed"
+	done
+	;;
+  stop)
+	printf "Removing modules: "
+	grep '^[^#]' "/etc/modules" | \
+	while read module args; do
+		[ "$module" ] || continue
+		/sbin/modprobe -r $module $args && echo "  $module removed" || echo "  $module failed"
+	done
+	;;
+  restart|reload)
+	"$0" stop
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
